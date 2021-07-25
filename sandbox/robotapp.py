@@ -1,27 +1,41 @@
 from pynput import keyboard
+import pygame
 import os
  
 class robotapp:
+    keyarray = []
+
     def __init__(self):
         pass
+
+    def esc(code):
+        return f'\033[{code}m'
  
     def on_press(self, key):
         try:
-            HORIZ=str(2)
-            VERT=str(2)
-            user_string='XXX'
+            HORIZ=str(1)
+            VERT=str(1)
+            user_string='Ovladání: Kurzorové šipky ↑ ↓ → ← pro pohyb. ESC = konec'
             print("\033["+VERT+";"+HORIZ+"f"+user_string)
-            print('alphanumeric key {0} pressed'.format(
-                key.char))
+            VERT=str(2)
+            user_string='========================================================'
+            print("\033["+VERT+";"+HORIZ+"f"+user_string)
+            if '{0}'.format(key) not in self.keyarray:                
+                self.keyarray.append('{0}'.format(key))
+                print(str(self.keyarray))            
         except AttributeError:
-            print('special key {0} pressed'.format(
-                key))
+            if '{0}'.format(key) not in self.keyarray:                
+                self.keyarray.append('{0}'.format(key))
+                print(str(self.keyarray))
  
     def on_release(self, key):
-        print('{0} released'.format(
-            key))
+        if '{0}'.format(key) not in self.keyarray:
+            self.keyarray.remove('{0}'.format(key))
+        print(str(self.keyarray))        
         if key == keyboard.Key.esc:
             # Stop listener
+            os.system('cls' if os.name=='nt' else 'clear')
+            print(str(self.keyarray))
             return False
  
     # Collect events until released
